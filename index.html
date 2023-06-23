@@ -648,30 +648,74 @@
 
           <div class="col-lg-8 mt-5 mt-lg-0">
 
-            <!-- <form action="forms/contact.php" method="post" role="form" class="php-email-form"> -->
-            <form action="https://formspree.io/f/xyyqggoz" method="POST">
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+            <!-- <form action="forms/contact.php" method="post" role="form" class="php-email-form"> --> <!-- Static site Only-->
+              <form action="https://formspree.io/f/xyyqggoz" method="POST" role="form" class="php-email-form">
+                <div class="row">
+                  <div class="col-md-6 form-group">
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                  </div>
+                  <div class="col-md-6 form-group mt-3 mt-md-0">
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                  </div>
                 </div>
-                <div class="col-md-6 form-group mt-3 mt-md-0">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                <div class="form-group mt-3">
+                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
                 </div>
-              </div>
-              <div class="form-group mt-3">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-              </div>
-              <div class="form-group mt-3">
-                <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-              </div>
-              <div class="my-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
-            </form>
-
+                <div class="form-group mt-3">
+                  <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+                </div>
+                <div class="my-3">
+                  <div class="loading" style="display: none;">Loading</div>
+                  <div class="error-message" style="display: none;"></div>
+                  <div class="sent-message" style="display: none;">Your message has been sent. Thank you!</div>
+                </div>
+                <div class="text-center"><button type="button" id="submit-btn">Send Message</button></div>
+              </form>
+              
+              <!--Remove or change if using static Site-->
+              <script> 
+              document.getElementById("submit-btn").addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent the default form submission
+              
+                var nameInput = document.getElementById("name");
+                var emailInput = document.getElementById("email");
+              
+                // Check if name and email fields are filled
+                if (nameInput.value.trim() === "" || emailInput.value.trim() === "") {
+                  document.querySelector(".error-message").innerHTML = "Please fill in all required fields.";
+                  document.querySelector(".error-message").style.display = "block"; // Show error message
+                  return; // Stop form submission
+                }
+              
+                // Show the loading message
+                document.querySelector(".loading").style.display = "block";
+                // Hide any previous error or success messages
+                document.querySelector(".error-message").style.display = "none";
+                document.querySelector(".sent-message").style.display = "none";
+              
+                // Perform the form submission
+                var form = document.querySelector(".php-email-form");
+                var formData = new FormData(form);
+                var xhr = new XMLHttpRequest();
+                xhr.open(form.method, form.action);
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.onreadystatechange = function() {
+                  if (xhr.readyState !== XMLHttpRequest.DONE) return;
+                  if (xhr.status === 200) {
+                    form.reset(); // Clear the form fields on successful submission
+                    document.querySelector(".sent-message").style.display = "block"; // Show success message
+                  } else {
+                    var errorMessage = xhr.response.message || "An error occurred while submitting the form.";
+                    document.querySelector(".error-message").innerHTML = errorMessage;
+                    document.querySelector(".error-message").style.display = "block"; // Show error message
+                  }
+                  document.querySelector(".loading").style.display = "none"; // Hide loading message
+                };
+                xhr.send(formData);
+              });
+              </script>
+                           
+              
           </div>
 
         </div>
