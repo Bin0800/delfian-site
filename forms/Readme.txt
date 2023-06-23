@@ -1,2 +1,2 @@
-Fully working PHP/AJAX contact form script is available in the pro version of the template.
-You can buy it from: https://bootstrapmade.com/free-html-bootstrap-template-my-resume/
+When creating a static website, it is necessary to utilize a third-party service (Formspree) for form handling, 
+while for a dynamic site, the implementation requires the utilization of PHP forms.
